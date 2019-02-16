@@ -21,6 +21,9 @@ namespace Emgu_CV
         Image<Bgr,Byte> frame;
         private bool _captureInProgress = false;
         Image<Bgr, byte> temp;
+        
+
+
         public Form1()
         {
             InitializeComponent();
@@ -33,9 +36,26 @@ namespace Emgu_CV
         void TimerEventProcessor(object sender, EventArgs e)
         {
             frame = _Capture.QueryFrame();
-            imageBox1.Image = frame;
+            imageBox1.Image = FaceDetection(frame);
         }
-        private void Button1_Click(object sender, EventArgs e)
+
+        static Image<Bgr, Byte> FaceDetection(Image<Bgr, Byte> imgForDetection)
+        {
+            Image<Gray, Byte> gray = imgForDetection.Convert<Gray, Byte>();
+            gray._EqualizeHist();
+            HaarCascade face = new HaarCascade("haarcascade_frontalface_default.xml");
+            MCvAvgComp[][] facesDetected = gray.DetectHaarCascade(face, 1.1, 10, HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
+            foreach (MCvAvgComp f in facesDetected[0])
+            {
+                //draw the face detected in the 0th (gray) channel with blue color
+                imgForDetection.Draw(f.rect, new Bgr(Color.Red), 2);
+
+
+            }
+            return imgForDetection;
+
+        }
+            private void Button1_Click(object sender, EventArgs e)
         {
            
             
@@ -98,6 +118,8 @@ namespace Emgu_CV
 
                 _Capture = new Capture();
                 Application.Idle += new EventHandler(TimerEventProcessor);
+
+                Image<Bgr, Byte> detected =FaceDetection(frame);
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {
                     FileName = DateTime.Now.ToString("yyyy_MMdd_hh_mm_ss"),
@@ -141,6 +163,7 @@ namespace Emgu_CV
                     CvInvoke.cvShowImage("camera", temp.Ptr);
                     temp = _Capture.QueryFrame();
                     int c = CvInvoke.cvWaitKey(3);
+                    Image<Bgr, byte> marked = FaceDetection(temp);
                     video.WriteFrame<Bgr, byte>(temp);
                     if (c == 27) break;
                 }

@@ -152,6 +152,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="haarcascade_eye.xml" />
+    <Content Include="haarcascade_frontalface_default.xml" />
     <Content Include="idag.ico" />
     <Content Include="opencv_core240.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
