@@ -37,17 +37,22 @@ namespace Emgu_CV
         }
         private void Button1_Click(object sender, EventArgs e)
         {
+           
+            
             if (_Capture == null)
             {
+                
                 try
                 {
                     //打開預設的webcam
-                    _Capture = new Capture(0);
-
+                    
+                    _Capture = new Capture();
+                   
                 }
-                catch (NullReferenceException excpt)
+                catch (NullReferenceException)
                 {
-                    MessageBox.Show(excpt.Message);
+                    MessageBox.Show("請先插入WebCam裝置，再按確定!");
+                    
                 }
             }
             if (_Capture != null)
@@ -56,7 +61,7 @@ namespace Emgu_CV
                 if (_captureInProgress)
                 {  //stop the capture
                     _captureInProgress = false;
-                    button1.Text = "開始";
+                    button1.Text = "重新連接";
                     Application.Idle -= TimerEventProcessor;
                 }
                 //frame關閉
@@ -73,9 +78,8 @@ namespace Emgu_CV
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            _Capture = new Capture(0);
-
-            frame =_Capture.QueryFrame();
+            
+            
             if (_Capture == null)
             {
                 try
@@ -91,6 +95,7 @@ namespace Emgu_CV
             }
             else
             {
+                _Capture = new Capture();
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {
                     FileName = DateTime.Now.ToString("yyyy_MMdd_hh_mm_ss"),
@@ -108,14 +113,15 @@ namespace Emgu_CV
 
         private void Button3_Click(object sender, EventArgs e)
         {
-            _Capture = new Capture();
-            Application.Idle += new EventHandler(TimerEventProcessor);
+            
+            
             if (_Capture == null)
             {
                 MessageBox.Show("請重新連接WebCam", "error");
             }
             else
             {
+                _Capture = new Capture();
                 temp = _Capture.QueryFrame();
                 SaveFileDialog SaveFileDialog2 = new SaveFileDialog
                 {
@@ -126,7 +132,7 @@ namespace Emgu_CV
                 {
                     MessageBox.Show("開始錄製，按ESC結束錄製");
                 }
-                frame.Dispose();
+                
                 VideoWriter video = new VideoWriter(SaveFileDialog2.FileName, CvInvoke.CV_FOURCC('X', 'V', 'I', 'D'), 60, 640, 480, true);
                 while (temp != null)
                 {
