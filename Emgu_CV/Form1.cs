@@ -126,6 +126,7 @@ namespace Emgu_CV
                 {
                     MessageBox.Show("開始錄製，按ESC結束錄製");
                 }
+                frame.Dispose();
                 VideoWriter video = new VideoWriter(SaveFileDialog2.FileName, CvInvoke.CV_FOURCC('X', 'V', 'I', 'D'), 60, 640, 480, true);
                 while (temp != null)
                 {
