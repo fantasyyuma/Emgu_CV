@@ -95,7 +95,9 @@ namespace Emgu_CV
             }
             else
             {
+
                 _Capture = new Capture();
+                Application.Idle += new EventHandler(TimerEventProcessor);
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {
                     FileName = DateTime.Now.ToString("yyyy_MMdd_hh_mm_ss"),
@@ -133,7 +135,7 @@ namespace Emgu_CV
                     MessageBox.Show("開始錄製，按ESC結束錄製");
                 }
                 
-                VideoWriter video = new VideoWriter(SaveFileDialog2.FileName, CvInvoke.CV_FOURCC('X', 'V', 'I', 'D'), 60, 640, 480, true);
+                VideoWriter video = new VideoWriter(SaveFileDialog2.FileName, CvInvoke.CV_FOURCC('X', 'V', 'I', 'D'), 5, 640, 480, true);
                 while (temp != null)
                 {
                     CvInvoke.cvShowImage("camera", temp.Ptr);
